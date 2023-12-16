@@ -18004,7 +18004,7 @@ PrefabInstance:
       objectReference: {fileID: 1579451642}
     - target: {fileID: 5478923886910263445, guid: 7023b93193ffe3d48b56b8abd8d00da7, type: 3}
       propertyPath: guideDialogue._dialogueItems.Array.size
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5478923886910263445, guid: 7023b93193ffe3d48b56b8abd8d00da7, type: 3}
       propertyPath: completeDialogue._dialogueItems.Array.size
