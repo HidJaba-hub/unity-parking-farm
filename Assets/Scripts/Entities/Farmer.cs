@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Managers;
+﻿using Managers;
 using UnityEngine;
 using UnityEngine.Serialization;
-using static Entities.FollowerExtension;
 
 namespace Entities
 {
@@ -13,7 +9,7 @@ namespace Entities
         public float speed;
         public Animator Animator;
         
-        public GameObject entrePath;
+        public GameObject entryPath;
         public GameObject guidePath;
         public GameObject exitPath;
 
@@ -31,7 +27,7 @@ namespace Entities
         {
             Animator.SetBool("Walking", true);
             
-            transform.Follow(entrePath, speed,
+            transform.Follow(entryPath, speed,
                 () =>
                 {
                     Animator.SetBool("Walking", false);
