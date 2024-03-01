@@ -7,6 +7,7 @@ namespace Managers
 {
     public class InputController : MonoBehaviour
     {
+        private LooseConditionController looseConditionController;
         private Vector2 mousePosFirst;
         private Vector2 mouseVector;
 
@@ -21,13 +22,14 @@ namespace Managers
         
         private void Start()
         {
+            gameObject.TryGetComponent<LooseConditionController>(out looseConditionController);
             _mainCamera = Camera.main;
         }
 
         private void Update()
         {
             if (ExecuteSelectedCar()) return;
-
+            
             ActOnSelectedCar();
         }
 
@@ -79,7 +81,11 @@ namespace Managers
         private void MoveSelectedCar ()
         {
             if (_selectedElement != null)
-                _selectedElement.Act(orientation, isPositive);
+            {
+                if (!_selectedElement.Act(orientation, isPositive)) return;
+                
+                if(looseConditionController) looseConditionController.StartCondition();
+            }
             _selectedElement = null;
         }
 

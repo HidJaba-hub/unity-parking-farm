@@ -8,6 +8,7 @@ TagManager:
   - Access
   - GameObject
   - PathNode
+  - Obstacle
   layers:
   - Default
   - TransparentFX

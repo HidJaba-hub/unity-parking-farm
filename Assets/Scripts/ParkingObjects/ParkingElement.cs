@@ -49,12 +49,13 @@ namespace ParkingObjects
             _bumpIntoObject = new BumpIntoObject(this);
         }
 
-        public void Act(Orientation ori, bool isForward)
+        public bool Act(Orientation ori, bool isForward)
         {
-            if(_carOrientation != ori) return;
-
+            if(_carOrientation != ori) return false;
+            
             var direction = ori == Orientation.Vertical ? Vector3.forward : Vector3.right;
             PerformAction(direction * (isForward ? 1 : -1));
+            return true;
         }
 
         private void PerformAction(Vector3 dir)

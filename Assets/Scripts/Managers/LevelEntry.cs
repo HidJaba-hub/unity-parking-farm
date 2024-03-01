@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using ParkingObjects;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Managers
         
         private void Awake()
         {
+            Time.timeScale = 1;
             Application.targetFrameRate = 60;
         
             FindCars();
@@ -46,6 +48,22 @@ namespace Managers
         {
             DOTween.KillAll();
             SceneManager.LoadScene(_nextLevelName);
+        }
+
+        public void LoadRunner()
+        {
+            DOTween.KillAll();
+            
+            PlayerPrefs.SetString("NextScene", _nextLevelName);
+            PlayerPrefs.SetString("PrevScene", SceneManager.GetActiveScene().name);
+            
+            SceneManager.LoadScene("RunnerScene");
+        }
+        public void ResetLevel()
+        {
+            DOTween.KillAll();
+            
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }
