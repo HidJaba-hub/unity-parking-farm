@@ -14,11 +14,18 @@ public class CountDown : LooseCondition
 
     public override void LooseAction()
     {
+        if (maxSteps == 0) return;
         maxSteps--;
         textToChange.text = maxSteps.ToString();
         if (maxSteps == 0)
         {
             PauseAndShowBoard();
         }
+    }
+
+    public override void SetPlusFiveBonuses()
+    {
+        maxSteps += 5;
+        textToChange.text = maxSteps.ToString();
     }
 }

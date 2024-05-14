@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using TMPro;
 using UnityEngine;
 
@@ -10,11 +11,16 @@ public class LooseCondition : MonoBehaviour
 
     protected void PauseAndShowBoard()
     {
-        Time.timeScale = 0;
+        LevelEntry.Pause();
         looseBoard.SetActive(true);
     }
 
     public virtual void LooseAction()
     {
+    }
+
+    public virtual void SetPlusFiveBonuses()
+    {
+        
     }
 }

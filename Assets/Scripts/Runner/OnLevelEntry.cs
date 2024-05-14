@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,13 +13,13 @@ public class OnLevelEntry : MonoBehaviour
     public void Start()
     {
         Time.timeScale = 1;
-        StartCoroutine(playListText.AlphaCoroutine(() => {
+        playListText.AlphaTextAnimation(0, () => {
             foreach (var move in movers)
             {
                 move.Run();
             }
-            playListText.gameObject.SetActive(false);
-        }));
+            playListText.gameObject.SetActive(false); }
+            );
     }
 
     public void EndOfGame()
@@ -28,13 +29,17 @@ public class OnLevelEntry : MonoBehaviour
             move.StopRun();
         }
     }
-    public void LoadNextScene()
+    public void LoadPrevSceneUnBonused()
     {
-        SceneManager.LoadScene(PlayerPrefs.GetString("NextScene"));
+        SceneManager.LoadScene(PlayerPrefs.GetInt("PrevScene"));
     }
 
     public void LoadPrevScene()
     {
-        SceneManager.LoadScene(PlayerPrefs.GetString("PrevScene"));
+        int prevScene = PlayerPrefs.GetInt("PrevScene");
+        SaveLevelSystem.LoadLevel();
+        SaveLevelSystem.levelToSave.IsBonused = true;
+        SaveLevelSystem.SaveLevel();
+        SceneManager.LoadScene(prevScene);
     }
 }

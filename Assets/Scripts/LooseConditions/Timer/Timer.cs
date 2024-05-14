@@ -50,4 +50,9 @@ public class Timer : LooseCondition
         var timeInMinutes = minutes + ":" + seconds;
         textToChange.text = timeInMinutes;
     }
+    public override void SetPlusFiveBonuses()
+    {
+        timeToPlay += 5;
+        SecondToMinutes(timeToPlay);
+    }
 }

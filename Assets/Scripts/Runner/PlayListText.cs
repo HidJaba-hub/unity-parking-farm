@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -19,6 +20,25 @@ public class PlayListText : MonoBehaviour
         }
     }
 
+    public void AlphaTextAnimation(int value, Action action)
+    {
+        TextMeshProUGUI text = _textMeshProUguis[value];
+        Color color = text.color;
+        DOTween.To(() => color.a, x =>
+        {
+            color.a = x;
+            text.color = color;
+        }, 1, 0.5f).OnComplete(() => {
+        DOTween.To(() => color.a, x =>
+        {
+            color.a = x;
+            text.color = color;
+        }, 0, 0.5f).OnComplete(() =>
+        {
+            if(value+1 < _textMeshProUguis.Count) AlphaTextAnimation(value+1, action);
+            else action?.Invoke();
+        });});
+    }
     public IEnumerator AlphaCoroutine(Action action)
     {
         foreach (var text in _textMeshProUguis)

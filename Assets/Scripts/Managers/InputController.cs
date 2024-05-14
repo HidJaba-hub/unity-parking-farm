@@ -1,13 +1,15 @@
 using System;
+using System.Collections.Generic;
 using Enums;
 using ParkingObjects;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Managers
 {
     public class InputController : MonoBehaviour
     {
-        private LooseConditionController looseConditionController;
+        private List<LooseConditionController> looseConditionControllers = new List<LooseConditionController>();
         private Vector2 mousePosFirst;
         private Vector2 mouseVector;
 
@@ -22,8 +24,12 @@ namespace Managers
         
         private void Start()
         {
-            gameObject.TryGetComponent<LooseConditionController>(out looseConditionController);
+            gameObject.GetComponents(looseConditionControllers);
             _mainCamera = Camera.main;
+            foreach (var loose in looseConditionControllers)
+            {
+                loose.SetBonuses();
+            }
         }
 
         private void Update()
@@ -35,6 +41,7 @@ namespace Managers
 
         private void ActOnSelectedCar()
         {
+            if (CheckUIOverlap()) return;
             if (Input.GetMouseButtonUp(0))
             {
                 mouseVector.x = Input.mousePosition.x - mousePosFirst.x;
@@ -46,6 +53,7 @@ namespace Managers
 
         private bool ExecuteSelectedCar()
         {
+            if (CheckUIOverlap()) return false;
             if (Input.GetMouseButtonDown(0))
             {
                 var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -64,6 +72,10 @@ namespace Managers
             return false;
         }
 
+        private bool CheckUIOverlap()
+        {
+            return EventSystem.current.IsPointerOverGameObject();
+        }
         private void CalculateDirection(float x, float y)
         {
             if (Mathf.Abs(x) > Mathf.Abs(y))
@@ -83,8 +95,11 @@ namespace Managers
             if (_selectedElement != null)
             {
                 if (!_selectedElement.Act(orientation, isPositive)) return;
-                
-                if(looseConditionController) looseConditionController.StartCondition();
+
+                foreach (var loose in looseConditionControllers)
+                {
+                    loose.StartCondition();
+                }
             }
             _selectedElement = null;
         }

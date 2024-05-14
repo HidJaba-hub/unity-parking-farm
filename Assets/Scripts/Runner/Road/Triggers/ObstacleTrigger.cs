@@ -17,7 +17,7 @@ public class ObstacleTrigger : PlayerTrigger
     {
         if (other.gameObject.CompareTag(_tagToTrigger))
         {
-            PlayerMove.SpeedDecrease();
+            PlayerMove.StopForSec();
         }
 
         if (other.Equals(target))

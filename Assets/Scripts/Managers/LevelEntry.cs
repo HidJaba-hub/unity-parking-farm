@@ -1,4 +1,4 @@
-using System;
+
 using DG.Tweening;
 using ParkingObjects;
 using UnityEngine;
@@ -11,15 +11,17 @@ namespace Managers
     {
         [SerializeField] private Transform _carsHolder;
         private int _carsAmount;
-
-        [SerializeField] private string _nextLevelName;
         
+        [SerializeField] private string _menuScene;
+
+        public int levelIndex;
         private void Awake()
         {
             Time.timeScale = 1;
             Application.targetFrameRate = 60;
-        
+            
             FindCars();
+            SaveLevelSystem.InitializeCurrentLevel(levelIndex);
         }
 
         private void FindCars ()
@@ -47,15 +49,29 @@ namespace Managers
         public void LoadNextLevel()
         {
             DOTween.KillAll();
-            SceneManager.LoadScene(_nextLevelName);
+            SaveLevelSystem.levelToSave.IsCompleted = true;
+            SaveLevelSystem.SaveLevel();
+            if (SceneExists(SceneManager.GetActiveScene().buildIndex + 1))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+            else
+            {
+                LoadMenu();
+            }
         }
-
+        public static bool SceneExists(int index)
+        {
+            var x = SceneUtility.GetScenePathByBuildIndex(index);
+            return x != "";
+        }
         public void LoadRunner()
         {
             DOTween.KillAll();
             
-            PlayerPrefs.SetString("NextScene", _nextLevelName);
-            PlayerPrefs.SetString("PrevScene", SceneManager.GetActiveScene().name);
+            PlayerPrefs.SetInt("NextScene", SceneManager.GetActiveScene().buildIndex + 1);
+            PlayerPrefs.SetInt("PrevScene", SceneManager.GetActiveScene().buildIndex);
+            SaveLevelSystem.SaveLevel();
             
             SceneManager.LoadScene("RunnerScene");
         }
@@ -63,7 +79,22 @@ namespace Managers
         {
             DOTween.KillAll();
             
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        public static void Pause()
+        {
+            Time.timeScale = 0;
+        }
+
+        public static void Continue()
+        {
+            Time.timeScale = 1;
+        }
+        public void LoadMenu()
+        {
+            Time.timeScale = 1;
+            SceneManager.LoadScene(_menuScene);
         }
     }
 }

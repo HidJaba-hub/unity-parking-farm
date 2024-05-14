@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Runner.Moving;
 using UnityEngine;
 
@@ -11,7 +12,6 @@ public class PlayerMove : Move
     private float _gravityValue = -9.81f;
 
     private AnimationToggler _animationToggler;
-
     private new void Start()
     {
         base.Start();
@@ -24,7 +24,7 @@ public class PlayerMove : Move
     protected override void ChangeSide()
     {
         int sign = 0;
-
+        if (moveSpeed <= 0) return;
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             sign = 1;
@@ -65,7 +65,17 @@ public class PlayerMove : Move
 
     public void SpeedDecrease()
     {
-        if(_animationToggler.FarmerDodge()) moveSpeed--;
+        if(_animationToggler.FarmerDodge()) moveSpeed-=0.5f;
+    }
+
+    public void StopForSec()
+    {
+        if (_animationToggler.FarmerDodge())
+        {
+            float prevSpeed = moveSpeed;
+            moveSpeed = 0;
+            DOTween.Sequence().SetDelay(.05f).OnComplete(() => moveSpeed = prevSpeed);
+        }
     }
     public override void StopRun()
     {

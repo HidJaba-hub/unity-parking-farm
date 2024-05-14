@@ -12,6 +12,7 @@ namespace Gui
 
         private void Awake()
         {
+            Screen.SetResolution(1920, 1080, true);
             Gui = this;
         }
     }
